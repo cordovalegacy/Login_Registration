@@ -37,7 +37,7 @@ const Login = () => {
                 <div className="flex flex-col w-1/2 m-auto">
                     <label htmlFor="password" className="text-left text-blue-500">Password</label>
                     <input
-                        type="text"
+                        type="password"
                         name="password"
                         className="bg-stone-200 border border-blue-500 rounded-lg text-center p-1"
                         placeholder="password"

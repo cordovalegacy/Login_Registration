@@ -1,12 +1,13 @@
 import React from "react";
 import axios from 'axios'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { useContext } from "react";
 import { MyContext } from "../App";
 
 const Registration = () => {
 
     const { user, setUser } = useContext(MyContext)
+    const redirect = useNavigate()
 
     const changeHandler = (e) => {
         setUser({...user, [e.target.name]: e.target.value})
@@ -14,10 +15,15 @@ const Registration = () => {
 
     const registrationHandler = (e) => {
         e.preventDefault()
-        // axios
-            // .post
-            // .then
-            // .catch
+        axios
+            .post('http://localhost:8000/api/register', user)
+            .then((res) => {
+                console.log("Registered User: ", res.data)
+                // redirect('/')
+            })
+            .catch((err) => {
+                console.log("Something went wrong: ", err)
+            })
         }
 
     return (
@@ -57,7 +63,7 @@ const Registration = () => {
                 <div className="flex flex-col w-1/2 m-auto">
                     <label htmlFor="password" className="text-left text-blue-500">Password</label>
                     <input
-                        type="text"
+                        type="password"
                         name="password"
                         className="bg-stone-200 border border-blue-500 rounded-lg text-center p-1"
                         placeholder="password"
@@ -67,14 +73,15 @@ const Registration = () => {
                 <div className="flex flex-col w-1/2 m-auto">
                     <label htmlFor="confirmPassword" className="text-left text-blue-500">Confirm Password</label>
                     <input
-                        type="text"
+                        type="password"
                         name="confirmPassword"
                         className="bg-stone-200 border border-blue-500 rounded-lg text-center p-1"
                         placeholder="confirm password"
                         onChange={changeHandler}
                     />
                 </div>
-            <Link to={'/login'} className='bg-stone-800 text-amber-400 hover:text-amber-500 py-2'>Already have an account? Login!</Link>
+                <input type="submit" value="Register" className="button bg-amber-400 w-1/2 m-auto rounded-lg cursor-pointer"/>
+            <Link to={'/login'} className='bg-stone-800 text-amber-400 hover:text-amber-500 py-2 w-1/2 m-auto'>Already have an account? Login!</Link>
             </form>
         </>
     )

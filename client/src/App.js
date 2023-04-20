@@ -15,6 +15,12 @@ function App() {
   const [userId, setUserId] = useState(null)
   const redirect = useNavigate()
 
+  // useEffect(() => {
+  //   if(user !== {}){
+  //     setUserId(user._id)
+  //   }
+  // })
+
   useEffect(() => {
     if(userId === null){
       redirect('/registration')
