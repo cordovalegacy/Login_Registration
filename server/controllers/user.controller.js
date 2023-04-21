@@ -33,8 +33,39 @@ module.exports = {
             }
         }
         catch (err) { //bad request
-            res.status(400).json(err)
+            res.status(400).json(err) //differs from Cadens
         }
+    },
+
+    loginUser: async (req, res) => {
+        try {
+            //check if user exists
+            const user = await UserModel.findOne({ email: req.body.email })
+            if (user) { //waits for user variable
+                //check to see if password entered matches password in DB
+                const passwordsMatch = await bcrypt.compare(req.body.password, user.password)
+                if (passwordsMatch) { //they match!
+                    //generate the userToken
+                    const userToken = jwt.sign({ _id: user._id, email: user.email }, secret, { expiresIn: '2h' })
+                    //log the user in
+                    res.status(201).cookie('userToken', userToken, { httpOnly: true, maxAge: 2 * 60 * 60 * 1000 }).json(user)
+                }
+                else{ //passwords don't match but email does
+                    res.status(400).json({message: "Invalid email/password combination"})
+                }
+            }
+            //if user does not exist
+            else {
+                res.status(400).json({ message: "Invalid email/password combination" })
+            }
+        }
+        catch (err) {
+            res.status(400).json(err) //differs from Caden's
+        }
+    },
+
+    logoutUser: (req, res) => {
+        res.clearCookie('userToken').json({message: "Logged out"})
     }
 
 }
