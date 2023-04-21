@@ -16,10 +16,14 @@ const Registration = () => {
     const registrationHandler = (e) => {
         e.preventDefault()
         axios
-            .post('http://localhost:8000/api/register', user)
+            .post('http://localhost:8000/api/register', user, {withCredentials: true})
             .then((res) => {
                 console.log("Registered User: ", res.data)
-                // redirect('/')
+                setUser({
+                    firstName: res.data.firstName,
+                    email: res.data.email
+                })
+                redirect('/')
             })
             .catch((err) => {
                 console.log("Something went wrong: ", err)
